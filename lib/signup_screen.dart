@@ -26,11 +26,15 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Future<void> createUserWithEmailPassword() async {
-    final UserCredential = await FirebaseAuth.instance
-        .createUserWithEmailAndPassword(
-            email: emailController.text.trim(),
-            password: passwordController.text.trim());
-    print(UserCredential);
+    try {
+      final UserCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: emailController.text.trim(),
+              password: passwordController.text.trim());
+      print(UserCredential);
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
+    }
   }
 
   @override

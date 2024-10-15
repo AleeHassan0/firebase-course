@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_course/firebase_options.dart';
+import 'package:firebase_course/home_screen.dart';
 import 'package:firebase_course/signup_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -45,7 +47,19 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const SignUpPage(),
+      home: StreamBuilder(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: const CircularProgressIndicator(),
+              );
+            }
+            if (snapshot.data != null) {
+              return const MyHomePage();
+            }
+            return const SignUpPage();
+          }),
     );
   }
 }
